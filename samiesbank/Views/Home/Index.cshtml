@@ -7,20 +7,20 @@
 
         @foreach (var customer in Model)
         {
-    <ul>
-        <li>
-            <p>Kundnummer: @customer.CustomerId</p>
-            <p>Kund: @customer.Name</p>
-             @foreach (var account in customer.Accounts)
-                {
-                    <li>
-                        <p>Kontonummer: @account.AccountId</p>
-                        <p>Saldo: @account.Balance</p>
-                    </li>
-                }
-        </li>
+        <ul>
+            <li>
+                <p>Kundnummer: @customer.CustomerId</p>
+                <p>Kund: @customer.Name</p>
+                 @foreach (var account in customer.Accounts)
+                    {
+                        <li>
+                            <p>Kontonummer: @account.AccountID</p>
+                            <p>Saldo: @account.Balance</p>
+                        </li>
+                    }
+            </li>
 
-    </ul>
+        </ul>
         }
 
     </div>

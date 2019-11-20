@@ -21,7 +21,7 @@ namespace samiesbank.Tests
                     {
                         new Account()
                         {
-                            AccountId = 1,
+                            AccountID = 1,
                             Balance = 700M
                         }
                     }
@@ -53,7 +53,7 @@ namespace samiesbank.Tests
                     {
                         new Account()
                         {
-                            AccountId = 3,
+                            AccountID = 3,
                             Balance = 500M
                         }
                     }
@@ -67,7 +67,7 @@ namespace samiesbank.Tests
             BankRepository.Withdrawal(1, amount);
 
             // Assert
-            Assert.Equal(expected, BankRepository.ErrorMessage);
+            Assert.Equal(expected, BankRepository.Errormessage);
         }
 
 
@@ -85,7 +85,7 @@ namespace samiesbank.Tests
                     {
                         new Account()
                         {
-                            AccountId = 4,
+                            AccountID = 4,
                             Balance = 600M
                         }
                     }
@@ -116,7 +116,7 @@ namespace samiesbank.Tests
                     {
                         new Account()
                         {
-                            AccountId = 5,
+                            AccountID = 5,
                             Balance = 600M
                         }
                     }
@@ -147,7 +147,7 @@ namespace samiesbank.Tests
                     {
                         new Account()
                         {
-                            AccountId = 3,
+                            AccountID = 3,
                             Balance = 600M
                         }
                     }
@@ -161,7 +161,91 @@ namespace samiesbank.Tests
             BankRepository.Deposit(1, amount);
 
             // Assert
-            Assert.Equal(expected, BankRepository.ErrorMessage);
+            Assert.Equal(expected, BankRepository.Errormessage);
+        }
+
+        [Fact]
+        public void Transfer()
+        {
+            // Arrange
+            var fromAccount = new Account() { AccountID = 5, Balance = 600M };
+            var toAccount = new Account() { AccountID = 6, Balance = 700M }; 
+            decimal amount = 200M;
+            decimal expectedFromAccountBalance = 400M;
+            decimal expectedToAccountBalance = 900M;
+
+            // Act
+            var account = fromAccount.Transfer(amount, fromAccount, toAccount);
+
+            // Assert
+            Assert.Equal(expectedFromAccountBalance, fromAccount.Balance);
+            Assert.Equal(expectedToAccountBalance, toAccount.Balance);
+        }
+
+        [Fact]
+        public void TransferMoreThanAvalible()
+        {
+            // Arrange
+            var fromAccount = new Account() { AccountID = 5, Balance = 600M };
+            var toAccount = new Account() { AccountID = 6, Balance = 700M };
+            decimal amount = 650M;
+            decimal expected = 600M;
+
+            fromAccount.Transfer(amount, fromAccount, toAccount);
+            Assert.Equal(expected, fromAccount.Balance);
+        }
+
+        [Fact]
+        public void Transfer_AtLeastOneOfTheAccountsDontExist()
+        {
+            // Arrange
+            Account fromAccount = null;
+            var toAccount = new Account() { AccountID = 55, Balance = 400M };
+            string expected = Account.AtLeastOneOfTheAccountsDoesntExist;
+            decimal amount = 500M;
+
+            // Act
+            var account = new Account();
+            account.Transfer(amount, fromAccount, toAccount);
+
+            // Assert
+            Assert.Equal(expected, account.ErrorMessage);
+        }
+
+        [Fact]
+        public void Transfer_CantTransferNegativeAmounts()
+        {
+            // Arrange
+            var fromAccount = new Account() { AccountID = 99, Balance = 500M };
+            var toAccount = new Account() { AccountID = 7777, Balance = 400M };
+            var amount = -500M;
+            var expectedError = Account.CantTransferNegativeAmounts;
+            var expectedBalanceInFromAccount = 500M;
+            var expectedBalanceInInAccount = 400M;
+
+
+            // Act
+            var account = fromAccount.Transfer(amount, fromAccount, toAccount);
+
+            // Assert
+            Assert.Equal(expectedBalanceInFromAccount, fromAccount.Balance, 2);
+            Assert.Equal(expectedBalanceInInAccount, toAccount.Balance, 2);
+            Assert.Equal(expectedError, account.ErrorMessage);
+        }
+
+        [Fact]
+        public void Transfer_CantTransferToSameAccount()
+        {
+            // Arrange
+            var account = new Account() { AccountID = 888, Balance = 500M };
+            var amount = 300M;
+            var expected = Account.CantTransferBetweenSameAccounts;
+
+            // Act
+            account.Transfer(amount, account, account);
+
+            // Assert
+            Assert.Equal(expected, account.ErrorMessage);
         }
     }
 }

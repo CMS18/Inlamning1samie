@@ -7,7 +7,7 @@ namespace samiesbank.Models
 {
     public class BankRepository
     {
-        public static string ErrorMessage = "";
+        public static string Errormessage = "";
         public static string SuccessMessage = "";
 
         public const string AccountDoesNotExist = "No account with such an ID exists.";
@@ -39,7 +39,7 @@ namespace samiesbank.Models
 
             if (amount < 0)
             {
-                ErrorMessage = "You can't widthdraw negative amounts";
+                Errormessage = "You can't widthdraw negative amounts";
             }
             else
             {
@@ -49,17 +49,17 @@ namespace samiesbank.Models
                     {
                         account.Balance -= amount;
                         SuccessMessage = $"You successfully withdrew {amount} SEK from account {accountId}. Current balance: {account.Balance} SEK.";
-                        ErrorMessage = "";
+                        Errormessage = "";
                     }
                     else
                     {
-                        ErrorMessage = "You can't widthdraw more than the balance of the account.";
+                        Errormessage = "You can't widthdraw more than the balance of the account.";
                         SuccessMessage = "";
                     }
                 }
                 else
                 {
-                    ErrorMessage = AccountDoesNotExist;
+                    Errormessage = AccountDoesNotExist;
                     SuccessMessage = "";
                 }
             }
@@ -75,19 +75,19 @@ namespace samiesbank.Models
             {
                 if (amount < 0)
                 {
-                    ErrorMessage = "You can't deposit negative amounts.";
+                    Errormessage = "You can't deposit negative amounts.";
                     SuccessMessage = "";
                 }
                 else
                 {
                     account.Balance += amount;
                     SuccessMessage = $"You successfully deposited {amount} SEK to account {accountId}. Current balance: {account.Balance} SEK.";
-                    ErrorMessage = "";
+                    Errormessage = "";
                 }
             }
             else
             {
-                ErrorMessage = AccountDoesNotExist;
+                Errormessage = AccountDoesNotExist;
                 SuccessMessage = "";
             }
 
@@ -96,9 +96,58 @@ namespace samiesbank.Models
 
         private static Account GetAccount(int accountId)
         {
-            var account = GetAccounts().Find(a => a.AccountId == accountId);
+            var account = GetAccounts().Find(a => a.AccountID == accountId);
             return account;
         }
+        /*
+        public static bool Transfer(decimal amount, int fromAccountId, int toAccountId)
+        {
 
+            var accountTo = GetAccount(toAccountId);
+            var accountFrom = GetAccount(fromAccountId);
+            if (accountFrom == null || accountTo == null)
+            {
+                Errormessage = "The account could not be found. Make sure both account numbers are correct.";
+                SuccessMessage = "";
+            }
+            else
+            {
+                if (accountFrom.Balance - amount < 0)
+                {
+                    Errormessage =
+                        $"The amount you're transferring can't be higher than your balance. Your current balance is {accountFrom.Balance}";
+                    SuccessMessage = "";
+                }
+                else
+                {
+                    if (accountFrom.AccountID == accountTo.AccountID)
+                    {
+                        Errormessage =
+                            "The account you're sending money to can't be the same account you're deducting money from.";
+                        SuccessMessage = "";
+                    }
+                    else
+                    {
+                        if (amount < 0)
+                        {
+                            Errormessage = $"You can't transfer negative amount of {amount} from {accountFrom.AccountID} to {accountTo.AccountID}";
+                            SuccessMessage = "";
+                        }
+                        else
+                        {
+                            accountFrom.Balance -= amount;
+                            accountTo.Balance += amount;
+                            Errormessage = "";
+                            SuccessMessage =
+                                $"Congratulations you've transferred {amount} to account # {accountTo.AccountID} and the new balance is {accountTo.Balance}";
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+        */
     }
 }
+

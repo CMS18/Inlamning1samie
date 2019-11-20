@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using samiesbank.Models;
 using samiesbank.Models.ViewModels;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace samiesbank.Controllers
 {
     public class BankController : Controller
@@ -22,30 +20,34 @@ namespace samiesbank.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Deposit(TransactionViewModel model)
         {
             if (ModelState.IsValid)
             {
                 BankRepository.Deposit(model.DepositAccountId, model.DepositAmount);
             }
-            var newModel = new TransactionViewModel();
-            newModel.DepositErrorMessage = BankRepository.ErrorMessage;
-            newModel.DepositSuccessMessage = BankRepository.SuccessMessage;
-            return View("Index", newModel);
+            model.DepositErrorMessage = BankRepository.Errormessage;
+            model.DepositSuccessMessage = BankRepository.SuccessMessage;
+            BankRepository.SuccessMessage = "";
+            BankRepository.Errormessage = "";
+            return View("index", model);
         }
 
         [HttpPost]
-        public IActionResult Withdrawal(TransactionViewModel model)
+        [ValidateAntiForgeryToken]
+        public IActionResult Withdraw(TransactionViewModel model)
         {
             if (ModelState.IsValid)
             {
                 BankRepository.Withdrawal(model.WithdrawalAccountId, model.WithdrawalAmount);
 
             }
-            var newModel = new TransactionViewModel();
-            newModel.WithdrawalErrorMessage = BankRepository.ErrorMessage;
-            newModel.WithdrawalSuccessMessage = BankRepository.SuccessMessage;
-            return View("Index", newModel);
+            model.WithdrawalErrorMessage = BankRepository.Errormessage;
+            model.WithdrawalSuccessMessage = BankRepository.SuccessMessage;
+            BankRepository.SuccessMessage = "";
+            BankRepository.Errormessage = "";
+            return View("index", model);
         }
     }
 }
