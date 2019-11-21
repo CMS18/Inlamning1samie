@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿ @using Microsoft.AspNetCore.Hosting
+ @inject IHostingEnvironment environment
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -52,7 +55,10 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2019 - samiesbank - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <p>@environment.ApplicationName - @environment.EnvironmentName</p>
+
         </div>
+
     </footer>
 
     <environment include="Development">

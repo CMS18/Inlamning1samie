@@ -10,6 +10,8 @@ namespace samiesbank.Controllers
 {
     public class HomeController : Controller
     {
+
+
         public IActionResult Index()
         {
             var model = BankRepository.GetCustomers();
