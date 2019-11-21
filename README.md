@@ -1,2 +1,4 @@
-Detta projekt är en inlämningsuppgift i kursen Application Lifecycle Management. Ägare: Samie Shaya Övriga gruppmedlemmar: Robert Tadjer
+Detta projekt Ã¤r en del av inlÃ¤mningsuppgift 1 fÃ¶r ALM-kursen.
 
+Ã„gare: Samie Shaya
+Ã–vriga gruppmedlemmar: Robert Tadjer
